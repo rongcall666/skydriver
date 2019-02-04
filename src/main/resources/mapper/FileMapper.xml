@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skydriver.mapper.FileMapper">
+
+	<select id="findByUsersAndParent" resultMap="fileMap">
+		select * from file
+		where parent = ${parent} and user_id = ${userId}
+	</select>
+	<select id="findByFileID" parameterType="Integer"
+		resultMap="fileMap1">
+		select f.file_id,f.file_name,file_size,u.id from file f
+		left join users u 
+		on u.id = f.user_id
+		where f.file_id = ${fileId}
+	</select>
+	
+	<resultMap type="com.skydriver.entity.File" id="fileMap1">
+		<id property="fileId" column="file_id" />
+		<result property="fileName" column="file_name" />
+		<result property="fileSize" column="file_size" />
+		<association property="userId" javaType="com.skydriver.entity.Users">
+			<id column="id" property="id"/>
+		</association>
+	</resultMap>
+	
+	
+	
+	<select id="findByParent" parameterType="String"
+		resultMap="fileMap">
+		select * from file where parent = ${parent}
+	</select>
+	<select id="findByUsersAndFileName" resultMap="fileMap">
+		select f.file_id,f.file_name,f.file_size from file f
+		where f.file_name = #{fileName} and f.user_id = #{userId}
+	</select>
+	<insert id="add" parameterType="com.skydriver.entity.File">
+		insert into
+		file(file_name,parent,file_size,file_path,filetype_id,user_id)
+		values(#{fileName},#{parent},#{fileSize},#{filePath},#{filetypeId.filetypeId},#{userId.id})
+	</insert>
+	<update id="updateFileName">
+		update file set file_name = ${fileName}
+		where file_id
+		= #{fileId}
+	</update>
+	<delete id="delete" parameterType="Integer">
+		delete from file where file_id
+		= #{fileId}
+	</delete>
+	<select id="findByFiletypeId" resultMap="fileMap">
+		select f.file_id,f.file_name,file_size from file f where
+		f.user_id = #{userId} and filetype_id =
+		#{filetypeId}
+	</select>
+
+	<resultMap type="com.skydriver.entity.File" id="fileMap">
+		<id property="fileId" column="file_id" />
+		<result property="fileName" column="file_name" />
+		<result property="parent" column="parent" />
+		<result property="filePath" column="file_path" />
+		<result property="fileSize" column="file_size" />
+	</resultMap>
+
+	<select id="findByUsers" parameterType="Integer"
+		resultMap="fileMap">
+		select f.file_id,f.file_name,file_size from file f
+		where f.user_id = #{userId}
+	</select>
+</mapper>

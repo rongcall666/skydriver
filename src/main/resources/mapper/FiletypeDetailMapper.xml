@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skydriver.mapper.FiletypeDetailMapper">
+
+	<resultMap type="com.skydriver.entity.Filetype" id="filetypeMap" >
+		<id column="filetype_id" property="filetypeId"/>
+		<result column="filetype_name" property="filetypeName"/>
+	</resultMap>
+
+	<resultMap type="com.skydriver.entity.FiletypeDetail" id="filetypeDetailMap">
+		<id column="detail_id" property="detailId"/>
+		<result column="suffeix" property="suffix"/>
+		<association property="filetype" resultMap="filetypeMap"></association>
+	</resultMap>
+	
+	<select id="findAll" resultMap="filetypeDetailMap">
+		select d.detail_id,d.suffeix,f.filetype_id,filetype_name from filetype_detail d
+		left join filetype f
+		on d.filetype_id = f.filetype_id
+	</select>
+
+</mapper>

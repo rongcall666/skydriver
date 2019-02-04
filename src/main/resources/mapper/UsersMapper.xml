@@ -1,0 +1,78 @@
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.skydriver.mapper.UsersMapper">
+
+	<parameterMap type="com.skydriver.entity.Users"
+		id="userIdAndPassword">
+		<parameter property="uid" javaType="String" jdbcType="CHAR" />
+		<parameter property="password" javaType="String"
+			jdbcType="CHAR" />
+	</parameterMap>
+
+	<select id="findByUserIdAndPassword"
+		parameterMap="userIdAndPassword"
+		resultType="com.skydriver.entity.Users">
+		select * from users where uid = #{uid} and password =
+		#{password}
+	</select>
+
+	<resultMap type="com.skydriver.entity.Roles" id="rolesMap">
+		<id property="roleId" column="role_id" />
+		<result property="roleName" column="role_name" />
+	</resultMap>
+	<select id="findRoleByUserId" parameterType="Integer"
+		resultMap="rolesMap">
+		select r.* from user_role u
+		left join roles r on u.role_id =
+		r.role_id
+		where u.user_id = #{uid}
+	</select>
+
+	<insert id="add" parameterType="com.skydriver.entity.Users">
+		insert into
+		users(uid,password,username,register)
+		values(#{uid},#{password},#{username},#{register})
+	</insert>
+
+	<update id="updatePassword" parameterMap="userIdAndPassword">
+		update users set
+		password = #{password} where uid = #{uid}
+	</update>
+
+	<parameterMap type="com.skydriver.entity.Users"
+		id="userIdAndUsername">
+		<parameter property="uid" javaType="String" jdbcType="CHAR" />
+		<parameter property="username" javaType="String"
+			jdbcType="CHAR" />
+	</parameterMap>
+	<update id="updateUsername" parameterMap="userIdAndUsername">
+		update users set
+		username = #{username} where uid = #{uid}
+	</update>
+
+	<update id="updateUsecapacity">
+		update users set usecapacity =
+		#{usecapacity}
+		where id = #{id}
+	</update>
+
+	<delete id="delete" parameterType="Integer">
+		delete from users where id =
+		#{id}
+	</delete>
+	
+	
+	<select id="findByUserId" parameterType="String"
+		resultType="com.skydriver.entity.Users">
+		select * from users where uid = #{uid}
+	</select>
+	<select id="isexist" parameterType="String" resultType="Integer">
+		select
+		count(uid) from users where uid = #{uid}
+	</select>
+	<select id="findAll" resultType="com.skydriver.entity.Users">
+		select * from users
+	</select>
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skydriver.mapper.AuthorityMapper">
+
+<select id="findAllRole" resultMap="rolesMap">
+		select r.* from roles r ,role_authority r2,authority a
+		where r2.role_id = r.role_id
+		and a.authority_id = r2.authority_id
+	</select>
+
+	<insert id="add" parameterType="com.skydriver.entity.Authority">
+		insert into
+		authority(authority_detail,authority_url)
+		values(#{authorityDetail},#{authorityUrl})
+	</insert>
+
+	<update id="update"
+		parameterType="com.skydriver.entity.Authority">
+		update authority set authority_url = #{authorityUrl}
+		where authority_id = #{authorityId}
+	</update>
+
+
+	<resultMap type="com.skydriver.entity.Roles" id="rolesMap">
+		<id property="roleId" column="role_id" />
+		<result property="roleName" column="role_name" />
+	</resultMap>
+
+	<select id="findByAuthorityUrl" parameterType="String"
+		resultMap="rolesMap">
+		select r.* from roles r ,role_authority r2,authority a
+		where r2.role_id = r.role_id
+		and a.authority_id = r2.authority_id
+		and a.authority_url = #{authorityUrl}
+	</select>
+
+	<delete id="delete" parameterType="Integer">
+		delete from authority where
+		authority_id = #{authorityId}
+	</delete>
+	
+	
+	<resultMap type="com.skydriver.entity.Authority" id="authorityMap">
+		<id property="authorityId" column="authority_id"></id>
+		<result property="authorityDetail" column="authority_detail"/>
+		<result property="authorityUrl" column="authority_url"/>
+	</resultMap>
+	
+	
+	
+	<select id="findAll"
+		resultMap="authorityMap">
+		select * from authority
+	</select>
+
+
+
+</mapper>

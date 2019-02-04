@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skydriver.mapper.FiletypeMapper">
+	
+	<resultMap id="filetypeMap" type="com.skydriver.entity.Filetype">
+		<id column="filetype_id" property="filetypeId"/>
+		<result column="filetype_name" property="filetypeName"/>
+	</resultMap>
+	
+	
+	<select id="findAll" resultMap="filetypeMap">
+		select * from filetype
+	</select>
+
+	<insert id="add" parameterType="com.skydriver.entity.Filetype">
+		insert into
+		filetype(filetype_name)
+		values(#{filetypeName})
+	</insert>
+
+	<delete id="delete" parameterType="Integer">
+		delete from filetype where
+		filetype_id = #{filetypeId}
+	</delete>
+
+	<update id="update"
+		parameterType="com.skydriver.entity.Filetype">
+		update filetype set filetype_name = #{filetypeName}
+		where filetype_id = #{filetypeId}
+	</update>
+
+	<select id="findByFiletypeName" parameterType="String"
+		resultMap="filetypeMap">
+		select * from filetype where filetype_name like
+		'%#{filetypeName}%'
+	</select>
+</mapper>

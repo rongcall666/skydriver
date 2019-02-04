@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skydriver.mapper.FileuploadMapper">
+
+
+	<delete id="deleteAll">
+		delete from fileupload where user_id = #{userId}
+	</delete>
+
+
+	<delete id="delete">
+		delete from fileupload where fileupload_id =
+		#{fileuploadId}
+	</delete>
+
+	<delete id="deleteByfileId" >
+		delete from fileupload
+		where file_id = #{fileId}
+	</delete>
+
+
+	<resultMap type="com.skydriver.entity.Fileupload" id="FileuploadMap">
+		<id column="fileupload_id" property="fileuploadId"/>
+		<result column="uploaddate" property="uploadDate"/>
+		<association property="file" javaType="com.skydriver.entity.File">
+			<id property="fileId" column="file_id"></id>
+			<result property="fileName" column="file_name"/>
+		</association>
+	</resultMap>
+
+
+	<select id="findByUploadTime"
+		resultMap="FileuploadMap">
+		select f1.*,f2.* from fileupload f1 
+		left join file f2 on f1.file_id = f2.file_id
+		 where f1.upload_time = #{uploadTime}
+		and f2.user_id = #{userId}
+	</select>
+
+	<select id="findByFileuploadId"
+		resultMap="FileuploadMap">
+		select f1.*,f2.* from fileupload f1 
+		left join file f2 on f1.file_id = f2.file_id
+		where f1.fileupload_id = #{fileuploadId}
+	</select>
+
+
+	<insert id="add" parameterType="com.skydriver.entity.Fileupload">
+		insert into
+		fileupload(file_id,upload_date,user_id,filetype_id)
+		values(#{file.fileId},#{uploadDate},#{userId.id},#{filetypeId.filetypeId})
+	</insert>
+
+	<select id="findByUser" parameterType="Integer"
+		resultMap="FileuploadMap">
+		select f1.*,f2.* from fileupload f1 
+		left join file f2 on f1.file_id = f2.file_id
+		where f1.user_id = ${userId}
+	</select>
+	<select id="findByFileName"
+		resultMap="FileuploadMap">
+		select f1.*,f2.* from fileupload f1 
+		left join file f2 on f1.file_id = f2.file_id
+		where f1.user_id = ${userId} and
+		upload_filename like '%${uploadFileName}%'
+	</select>
+
+</mapper>

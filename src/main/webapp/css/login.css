@@ -1,0 +1,28 @@
+body{
+	background-image: url(../image/login.jpg);
+	font-color:#f8f6e9;
+}
+
+.mycenter{
+	margin-top:100px;
+	margin-left: auto;
+	margin-right: auto;
+	height: 350px;
+	width:600px;
+	padding: 5%;
+	padding-left: 5%;
+	padding-right: 5%;
+}
+.mycenter mysign {
+	width:540px;
+}
+#hang{
+	 margin-top: 10px;
+}
+#heng{
+	margin-top:10px;
+	margin-left: 10px;
+	float: right;
+	width:100px;
+	height: 30px;
+}

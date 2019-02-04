@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skydriver.mapper.FiledownloadMapper">
+
+	<resultMap type="com.skydriver.entity.Filedownload" id="FiledownloadMap">
+		<id column="filedownload_id" property="filedownloadId"/>
+		<result column="filedownloaddate" property="filedownloadDate"/>
+		<association property="file" javaType="com.skydriver.entity.File">
+			<id property="fileId" column="file_id"></id>
+			<result property="fileName" column="file_name"/>
+		</association>
+	</resultMap>
+	<select id="findByUser" parameterType="Integer"
+		resultMap="FiledownloadMap">
+		select f1.*,f2.* from filedownload f1 
+		left join file f2 on f1.file_id = f2.file_id
+		 where f1.user_id = #{userId}
+	</select>
+
+	<delete id="delete" parameterType="Integer">
+		delete from filedownload where
+		filedownload_id = #{filedownloadId}
+	</delete>
+
+	<delete id="deleteAll" parameterType="Integer">
+		delete from filedownload
+		where user_id = #{userId}
+	</delete>
+
+	<delete id="deleteByfileId" >
+		delete from filedownload
+		where file_id = #{fileId}
+	</delete>
+
+
+	<insert id="add"
+		parameterType="com.skydriver.entity.Filedownload">
+		insert into
+		filedownload(file_id,filedownload_date,user_id,filetype_id)
+		values(#{file.fileId},#{filedownloadDate},#{userId.id},#{filetypeId.filetypeId})
+	</insert>
+	<select id="findByFileName"
+		resultMap="FiledownloadMap">
+		select f1.*,f2.* from filedownload f1 
+		left join file f2 on f1.file_id = f2.file_id
+		where filedownload_filename like '%${filedownloadFilename}%'
+		and f1.user_id = #{userId}
+	</select>
+
+
+</mapper>
